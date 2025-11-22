@@ -5,6 +5,9 @@
 
 import express from 'express';
 import * as path from 'path';
+import { postgraphile } from 'postgraphile';
+import PgSimplifyInflectorPlugin from '@graphile-contrib/pg-simplify-inflector';
+import PgAggregatesPlugin from '@graphile/pg-aggregates';
 
 const app = express();
 
@@ -13,6 +16,32 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to nx_postgraphie!' });
 });
+
+// ── PostGraphile config ─────────────────────────────
+const connectionString =
+  process.env.DATABASE_URL || 'postgres://user:password@localhost:5432/mydb';
+
+const schema = process.env.GRAPHILE_SCHEMA || 'public';
+
+app.use(
+  '/graphql',
+  postgraphile(connectionString, schema, {
+    graphiql: true,
+    enhanceGraphiql: true,
+    watchPg: process.env.NODE_ENV !== 'production',
+    dynamicJson: true,
+    disableDefaultMutations: false,
+    ignoreRBAC: false,
+    exportGqlSchemaPath: 'schema.graphql',
+    ignoreIndexes: false,
+    graphqlRoute: '/',
+    graphiqlRoute: '/graphiql',
+    appendPlugins: [
+      PgSimplifyInflectorPlugin,
+      PgAggregatesPlugin
+    ],
+  })
+);
 
 const port = process.env.PORT || 3333;
 const server = app.listen(port, () => {
