@@ -2,7 +2,6 @@
   "name": "@nx-postgraphie/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
   "private": true,
   "dependencies": {
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
@@ -49,5 +48,6 @@
   "workspaces": [
     "apps/*",
     "libs"
-  ]
+  ],
+  "packageManager": "yarn@4.11.0"
 }
