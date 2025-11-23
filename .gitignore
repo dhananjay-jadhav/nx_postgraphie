@@ -45,5 +45,5 @@ Thumbs.db
 
 test-output
 
-.yarn
+.yarn/*
 !.yarn/releases
